@@ -25,6 +25,19 @@ async function main() {
   });
   console.log(`Seeded team: ${defaultTeam.name}`);
 
+  const existingShift = await prisma.shift.findFirst({ where: { isDefault: true } });
+  const defaultShift =
+    existingShift ??
+    (await prisma.shift.create({
+      data: { name: "General", startTime: "09:30", endTime: "18:45", graceMinutes: 15, isDefault: true },
+    }));
+  console.log(`Seeded shift: ${defaultShift.name} (${defaultShift.startTime}-${defaultShift.endTime})`);
+
+  const existingLocation = await prisma.location.findFirst({ where: { isDefault: true } });
+  const defaultLocation =
+    existingLocation ?? (await prisma.location.create({ data: { name: "Default", isDefault: true } }));
+  console.log(`Seeded location: ${defaultLocation.name}`);
+
   console.log("Seed complete.");
 }
 
