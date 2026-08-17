@@ -1,0 +1,3 @@
+[build.environment]
+  # VITE_ vars are baked into the client JS bundle by design — not secrets.
+  SECRETS_SCAN_OMIT_KEYS = "VITE_API_URL"
