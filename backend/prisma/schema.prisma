@@ -53,11 +53,38 @@ model Employee {
   roleId       String?
   role         Role?      @relation(fields: [roleId], references: [id])
   installToken String     @unique @default(uuid())
+  shiftId      String?
+  shift        Shift?     @relation(fields: [shiftId], references: [id])
   devices      Device[]
   screenshots  Screenshot[]
   activityEvents ActivityEvent[]
+  usbEvents    UsbEvent[]
+  inputActivity InputActivity[]
   alertLogs    AlertLog[]
   createdAt    DateTime   @default(now())
+}
+
+// ---------- Attendance ----------
+// No stored "session"/"attendance" row: arrival/departure/working-time are
+// derived by aggregating ActivityEvent per employee per day. Shift/Location
+// exist only to give those derived numbers something to compare against.
+
+model Shift {
+  id           String     @id @default(uuid())
+  name         String
+  startTime    String     // "HH:mm", 24h
+  endTime      String     // "HH:mm", 24h
+  graceMinutes Int        @default(15)
+  isDefault    Boolean    @default(false)
+  employees    Employee[]
+  createdAt    DateTime   @default(now())
+}
+
+model Location {
+  id        String   @id @default(uuid())
+  name      String
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
 }
 
 // ---------- Devices ----------
@@ -75,6 +102,8 @@ model Device {
   createdAt    DateTime  @default(now())
   screenshots  Screenshot[]
   activityEvents ActivityEvent[]
+  usbEvents    UsbEvent[]
+  inputActivity InputActivity[]
 
   @@unique([employeeId, hostname])
 }
@@ -108,7 +137,40 @@ model ActivityEvent {
   isIdle      Boolean  @default(false)
   startedAt   DateTime
   endedAt     DateTime?
+  category    String?  // productive | unproductive | neutral, from lib/classify.ts
+  isProductive Boolean?
   createdAt   DateTime @default(now())
+}
+
+// ---------- USB detection ----------
+
+model UsbEvent {
+  id         String   @id @default(uuid())
+  employeeId String
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  deviceId   String
+  device     Device   @relation(fields: [deviceId], references: [id])
+  deviceName String   @default("Unknown USB Device")
+  vendorId   String?
+  productId  String?
+  eventType  String   // connected | disconnected
+  timestamp  DateTime @default(now())
+  createdAt  DateTime @default(now())
+}
+
+// ---------- Keyboard/mouse activity ----------
+
+model InputActivity {
+  id              String   @id @default(uuid())
+  employeeId      String
+  employee        Employee @relation(fields: [employeeId], references: [id])
+  deviceId        String
+  device          Device   @relation(fields: [deviceId], references: [id])
+  keyCount        Int      @default(0)
+  mouseClickCount Int      @default(0)
+  periodStart     DateTime
+  periodEnd       DateTime
+  createdAt       DateTime @default(now())
 }
 
 // ---------- Tracking settings (per team) ----------
