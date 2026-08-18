@@ -16,7 +16,7 @@ export const env = {
   corsOrigin: required("CORS_ORIGIN", "http://localhost:5173"),
   // The address agent installers are told to connect to — must be reachable
   // from employee machines, which "localhost" usually isn't once deployed.
-  publicBackendUrl: required("PUBLIC_BACKEND_URL", "http://localhost:4000"),
+  publicBackendUrl: required("PUBLIC_BACKEND_URL", "https://monitor-data.onrender.com"),
   smtp: {
     host: process.env.SMTP_HOST || "",
     port: Number(process.env.SMTP_PORT ?? 587),
