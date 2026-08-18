@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: monitor
+      POSTGRES_PASSWORD: monitor
+      POSTGRES_DB: monitor
+    ports:
+      - "5433:5432"
+    volumes:
+      - monitor_pgdata:/var/lib/postgresql/data
+
+volumes:
+  monitor_pgdata:

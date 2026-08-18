@@ -143,9 +143,31 @@ function LiveViewerModal({ employee, onClose }: { employee: Employee; onClose: (
           <span>
             {employee.firstName} {employee.lastName} — {status === "live" ? "Live" : status === "unavailable" ? "Unavailable" : "Connecting..."}
           </span>
-          <div className="space-x-3">
-            <button onClick={goFullscreen}>Fullscreen</button>
-            <button onClick={onClose}>Close</button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={goFullscreen}
+              aria-label="Fullscreen"
+              title="Fullscreen"
+              className="p-1.5 rounded hover:bg-white/10 transition"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3" />
+                <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+                <path d="M3 16v3a2 2 0 0 0 2 2h3" />
+                <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+              </svg>
+            </button>
+            <button
+              onClick={onClose}
+              aria-label="Close"
+              title="Close"
+              className="p-1.5 rounded hover:bg-white/10 transition"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 6 6 18" />
+                <path d="M6 6l12 12" />
+              </svg>
+            </button>
           </div>
         </div>
         <video

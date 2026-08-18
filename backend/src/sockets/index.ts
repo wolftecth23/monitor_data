@@ -50,6 +50,7 @@ export function setupSockets(io: Server) {
     if (socket.data.role === "admin") {
       socket.join("admins");
       registerAdminHandlers(io, socket);
+      sendPresenceSnapshot(socket).catch((err) => console.error("[socket] presence snapshot error", err));
       return;
     }
 
@@ -57,6 +58,21 @@ export function setupSockets(io: Server) {
       handleDeviceConnect(io, socket).catch((err) => console.error("[socket] device connect error", err));
     }
   });
+}
+
+// Admins only ever receive presence:update as it happens (see
+// handleDeviceConnect's connect/disconnect emits below) — a socket that
+// connects after a device is already online would otherwise show it as
+// offline forever, since there's nothing to trigger a re-emit. This replays
+// current state to a newly-connected admin so it doesn't depend on timing.
+async function sendPresenceSnapshot(socket: Socket) {
+  const onlineDevices = await prisma.device.findMany({
+    where: { status: "online" },
+    select: { id: true, employeeId: true },
+  });
+  for (const device of onlineDevices) {
+    socket.emit("presence:update", { employeeId: device.employeeId, deviceId: device.id, status: "online" });
+  }
 }
 
 async function handleDeviceConnect(io: Server, socket: Socket) {
