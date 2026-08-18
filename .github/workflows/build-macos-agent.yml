@@ -1,0 +1,40 @@
+name: Build macOS agent
+
+# Flutter's macOS desktop target can't be cross-compiled (Xcode only runs on
+# Apple hardware), so this builds it on a GitHub-hosted macOS runner instead.
+# Manual only — run from the Actions tab when agent/ changes need a new
+# macOS build. Download the resulting artifact and extract it into
+# backend/agent-builds/macos/ so the installer-download endpoint can serve it.
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.47.0"
+          channel: stable
+
+      - run: flutter config --enable-macos-desktop
+
+      - name: flutter pub get
+        working-directory: agent
+        run: flutter pub get
+
+      - name: flutter build macos
+        working-directory: agent
+        run: flutter build macos --release
+
+      - name: Package .app preserving permissions
+        working-directory: agent/build/macos/Build/Products/Release
+        run: tar -czf "$GITHUB_WORKSPACE/monitor_agent-macos.tar.gz" monitor_agent.app
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: monitor_agent-macos
+          path: monitor_agent-macos.tar.gz
+          retention-days: 14
