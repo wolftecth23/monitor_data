@@ -8,6 +8,7 @@ export default {
           DEFAULT: "#6C5CE7",
           dark: "#5849c2",
         },
+        sidebar: "#0f172a",
       },
     },
   },
