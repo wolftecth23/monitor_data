@@ -15,8 +15,8 @@ export function Layout() {
 
   return (
     <div className="flex h-screen">
-      <aside className="w-56 shrink-0 border-r bg-white flex flex-col">
-        <div className="px-4 py-4 font-bold text-lg text-brand">Monitor</div>
+      <aside className="w-56 shrink-0 bg-sidebar flex flex-col">
+        <div className="px-4 py-4 font-bold text-lg text-white">Monitor</div>
         <nav className="flex-1 px-2 space-y-1">
           {NAV_ITEMS.map((item) => (
             <NavLink
@@ -24,7 +24,7 @@ export function Layout() {
               to={item.to}
               className={({ isActive }) =>
                 `block rounded-md px-3 py-2 text-sm font-medium ${
-                  isActive ? "bg-brand/10 text-brand" : "text-gray-600 hover:bg-gray-100"
+                  isActive ? "bg-brand/20 text-white" : "text-gray-300 hover:bg-white/10 hover:text-white"
                 }`
               }
             >
@@ -32,9 +32,9 @@ export function Layout() {
             </NavLink>
           ))}
         </nav>
-        <div className="px-4 py-3 border-t text-sm">
-          <div className="font-medium">{user?.name}</div>
-          <div className="text-gray-500 text-xs">{user?.email}</div>
+        <div className="px-4 py-3 border-t border-white/10 text-sm">
+          <div className="font-medium text-white">{user?.name}</div>
+          <div className="text-gray-400 text-xs">{user?.email}</div>
           <button onClick={logout} className="mt-2 text-brand text-xs font-medium">
             Log out
           </button>
