@@ -13,7 +13,12 @@ export const env = {
   jwtSecret: required("JWT_SECRET"),
   port: Number(process.env.PORT ?? 4000),
   storageDir: required("STORAGE_DIR", "./storage"),
-  corsOrigin: required("CORS_ORIGIN", "http://localhost:5173"),
+  // Comma-separated so the same deploy can allow both the production admin
+  // origin and a local dev server, e.g. "https://trackmonitor.netlify.app,http://localhost:5173".
+  corsOrigin: required("CORS_ORIGIN", "http://localhost:5173")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean),
   // The address agent installers are told to connect to — must be reachable
   // from employee machines, which "localhost" usually isn't once deployed.
   publicBackendUrl: required("PUBLIC_BACKEND_URL", "https://monitor-data.onrender.com"),
