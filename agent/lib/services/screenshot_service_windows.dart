@@ -48,6 +48,13 @@ class WindowsScreenshotCapturer {
           bytes: bytes.buffer,
           order: img.ChannelOrder.bgra,
         );
+        // The 4th byte per pixel from a 32bpp BI_RGB DIB is unused padding,
+        // not real alpha — it comes back as 0, which encodeJpg reads as
+        // fully transparent and composites to a blank white JPEG unless
+        // forced opaque first.
+        for (final p in image) {
+          p.a = 255;
+        }
         final jpg = img.encodeJpg(image, quality: 70);
 
         final dir = await getTemporaryDirectory();
