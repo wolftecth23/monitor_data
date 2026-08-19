@@ -1,4 +1,16 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
 [build.environment]
   VITE_API_URL = "https://monitor-data.onrender.com"
   # VITE_ vars are baked into the client JS bundle by design — not secrets.
   SECRETS_SCAN_OMIT_KEYS = "VITE_API_URL"
+
+# Client-side routing (react-router) — without this, a hard refresh or
+# direct link to any route other than "/" 404s, since there's no
+# corresponding static file for e.g. /employees/123.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
