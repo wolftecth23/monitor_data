@@ -99,7 +99,7 @@ export function Screenshots() {
                     alt={s.windowTitle ?? "screenshot"}
                     className="w-full h-28 object-cover bg-gray-100"
                   />
-                  <div className="px-2 py-1 text-[10px] text-gray-500 truncate">
+                  <div className="px-2 py-1 text-[10px] text-black truncate">
                     {new Date(s.capturedAt).toLocaleTimeString()} · {s.appName}
                   </div>
                 </button>
@@ -146,15 +146,42 @@ function ScreenshotViewerModal({ screenshot, onClose }: { screenshot: Screenshot
             {new Date(screenshot.capturedAt).toLocaleString()} · {screenshot.appName ?? "Unknown app"}
             {screenshot.windowTitle ? ` — ${screenshot.windowTitle}` : ""}
           </span>
-          <div className="space-x-4">
-            <button onClick={download} className="hover:text-brand">
-              Download
+          <div className="flex items-center gap-2">
+            <button
+              onClick={download}
+              aria-label="Download"
+              title="Download"
+              className="p-1.5 rounded hover:bg-white/10 transition"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <path d="M7 10l5 5 5-5" />
+                <path d="M12 15V3" />
+              </svg>
             </button>
-            <button onClick={goFullscreen} className="hover:text-brand">
-              Fullscreen
+            <button
+              onClick={goFullscreen}
+              aria-label="Fullscreen"
+              title="Fullscreen"
+              className="p-1.5 rounded hover:bg-white/10 transition"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3" />
+                <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+                <path d="M3 16v3a2 2 0 0 0 2 2h3" />
+                <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+              </svg>
             </button>
-            <button onClick={onClose} className="hover:text-brand">
-              Close
+            <button
+              onClick={onClose}
+              aria-label="Close"
+              title="Close"
+              className="p-1.5 rounded hover:bg-white/10 transition"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 6 6 18" />
+                <path d="M6 6l12 12" />
+              </svg>
             </button>
           </div>
         </div>
