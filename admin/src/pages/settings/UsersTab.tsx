@@ -141,7 +141,7 @@ export function UsersTab() {
       </div>
 
       <div className="bg-white rounded-lg shadow divide-y">
-        <div className="grid grid-cols-7 px-4 py-2 text-xs font-medium text-gray-500">
+        <div className="grid grid-cols-[1.1fr_1.8fr_0.9fr_1fr_0.7fr_0.9fr_0.9fr] px-4 py-2 text-xs font-medium text-gray-500">
           <div>Name</div>
           <div>Email</div>
           <div>Team</div>
@@ -151,11 +151,13 @@ export function UsersTab() {
           <div>Actions</div>
         </div>
         {employees?.map((e) => (
-          <div key={e.id} className="grid grid-cols-7 px-4 py-3 text-sm items-center">
+          <div key={e.id} className="grid grid-cols-[1.1fr_1.8fr_0.9fr_1fr_0.7fr_0.9fr_0.9fr] px-4 py-3 text-sm items-center">
             <div>
               {e.firstName} {e.lastName}
             </div>
-            <div className="text-gray-500 truncate">{e.email}</div>
+            <div className="text-gray-500 truncate" title={e.email}>
+              {e.email}
+            </div>
             <div>{e.team?.name ?? "-"}</div>
             <div>{e.role?.name ?? "-"}</div>
             <div className="capitalize">{e.status}</div>
